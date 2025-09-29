@@ -1,0 +1,138 @@
+package Models;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public abstract class Person {
+    private Integer id;
+    private String nom;
+    private String prenom;
+    private LocalDate dateNaissance;
+    private String ville;
+    private Integer nombreEnfants;
+    private Boolean investissement;
+    private Boolean placement;
+    private String situationFamiliale;
+    private LocalDateTime createdAt;
+    private Integer score;
+
+    public Person() {}
+
+    public Person(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, String situationFamiliale, LocalDateTime createdAt, Integer score) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.ville = ville;
+        this.nombreEnfants = nombreEnfants;
+        this.investissement = investissement;
+        this.placement = placement;
+        this.situationFamiliale = situationFamiliale;
+        this.createdAt = createdAt;
+        this.score = score;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
+    }
+
+    public Integer getNombreEnfants() {
+        return nombreEnfants;
+    }
+
+    public void setNombreEnfants(Integer nombreEnfants) {
+        this.nombreEnfants = nombreEnfants;
+    }
+
+    public Boolean getInvestissement() {
+        return investissement;
+    }
+
+    public void setInvestissement(Boolean investissement) {
+        this.investissement = investissement;
+    }
+
+    public Boolean getPlacement() {
+        return placement;
+    }
+
+    public void setPlacement(Boolean placement) {
+        this.placement = placement;
+    }
+
+    public String getSituationFamiliale() {
+        return situationFamiliale;
+    }
+
+    public void setSituationFamiliale(String situationFamiliale) {
+        this.situationFamiliale = situationFamiliale;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                "nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", dateNaissance=" + dateNaissance +
+                ", ville='" + ville + '\'' +
+                ", nombreEnfants=" + nombreEnfants +
+                ", investissement=" + investissement +
+                ", placement=" + placement +
+                ", situationFamiliale='" + situationFamiliale + '\'' +
+                ", createdAt=" + createdAt +
+                ", score=" + score +
+                '}';
+    }
+}
