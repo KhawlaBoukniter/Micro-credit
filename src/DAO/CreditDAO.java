@@ -111,4 +111,27 @@ public class CreditDAO {
         }
         return null;
     }
+
+    public Credit getById(Integer id) {
+        String sql = "SELECT * FROM credit WHERE id = ?";
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Credit credit = new Credit(
+                        rs.getDate("date_credit").toLocalDate(),
+                        rs.getDouble("montant_demande"),
+                        rs.getDouble("taux_interet"),
+                        rs.getInt("duree_mois"),
+                        rs.getString("type_credit"),
+                        rs.getDouble("montant_octroye"),
+                        Decision.valueOf(rs.getString("decision"))
+                );
+                return credit;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;    }
 }
