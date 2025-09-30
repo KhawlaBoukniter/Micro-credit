@@ -17,7 +17,7 @@ public class Credit {
 
     public Credit() {}
 
-    public Credit(LocalDate dateCredit, Double montantDemande, Double tauxInteret, Integer dureeMois, String typeCredit, Double montantOctroye, Decision decision, Person client) {
+    public Credit(LocalDate dateCredit, Double montantDemande, Double tauxInteret, Integer dureeMois, String typeCredit, Double montantOctroye, Decision decision) {
         this.dateCredit = dateCredit;
         this.montantDemande = montantDemande;
         this.tauxInteret = tauxInteret;
@@ -25,6 +25,22 @@ public class Credit {
         this.typeCredit = typeCredit;
         this.montantOctroye = montantOctroye;
         this.decision = decision;
+        this.client = client;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Person getClient() {
+        return client;
+    }
+
+    public void setClient(Person client) {
         this.client = client;
     }
 
