@@ -21,6 +21,22 @@ public class Echeance {
         this.statusPaiement = statusPaiement;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Credit getCredit() {
+        return credit;
+    }
+
+    public void setCredit(Credit credit) {
+        this.credit = credit;
+    }
+
     public LocalDate getDateEcheance() {
         return dateEcheance;
     }
