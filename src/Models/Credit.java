@@ -88,7 +88,7 @@ public class Credit {
     public String toString() {
         return "Credit{" +
                 "id=" + id +
-                ", client=" + (client != null ? client.getNom() + " " + client.getPrenom() : "null") +g
+                ", client=" + (client != null ? client.getNom() + " " + client.getPrenom() : "null") +
                 "dateCredit=" + dateCredit +
                 ", montantDemande=" + montantDemande +
                 ", montantOctroye=" + montantOctroye +
