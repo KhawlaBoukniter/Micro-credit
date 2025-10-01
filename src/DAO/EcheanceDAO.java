@@ -17,13 +17,14 @@ public class EcheanceDAO {
     }
 
     public void addEcheance(Echeance echeance) {
-        String sql = "INSERT INTO echeances (credit_id, date_echeance, mensualite, date_paiement, status_paiement) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO echeances (id, credit_id, date_echeance, mensualite, date_paiement, status_paiement) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setString(1, echeance.getCredit().getId());
-            p.setDate(2, Date.valueOf(echeance.getDateEcheance()));
-            p.setDouble(3, echeance.getMensualite());
-            p.setDate(4, Date.valueOf(echeance.getDatePaiement()));
+            p.setString(1, echeance.getId());
+            p.setString(2, echeance.getCredit().getId());
+            p.setDate(3, Date.valueOf(echeance.getDateEcheance()));
+            p.setDouble(4, echeance.getMensualite());
+            p.setDate(5, Date.valueOf(echeance.getDatePaiement()));
             p.setString(6, echeance.getStatusPaiement().name());
 
             p.executeUpdate();

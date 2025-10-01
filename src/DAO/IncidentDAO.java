@@ -19,13 +19,14 @@ public class IncidentDAO {
     }
 
     public void addIncident(Incident incident) {
-        String sql = "INSERT INTO incident (date_incident, score, echeance_id, type_incident) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO incident (id, date_incident, score, echeance_id, type_incident) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setDate(1, Date.valueOf(incident.getDateIncident()));
-            p.setInt(2, incident.getScore());
-            p.setString(3, incident.getEcheance().getId());
-            p.setString(4, incident.getTypeIncident().name());
+            p.setString(1, incident.getId());
+            p.setDate(2, Date.valueOf(incident.getDateIncident()));
+            p.setInt(3, incident.getScore());
+            p.setString(4, incident.getEcheance().getId());
+            p.setString(5, incident.getTypeIncident().name());
 
             p.executeUpdate();
         } catch (SQLException e) {
@@ -41,7 +42,7 @@ public class IncidentDAO {
             p.setInt(2, incident.getScore());
             p.setString(3, incident.getEcheance().getId());
             p.setString(4, incident.getTypeIncident().name());
-            p.setString(6, incident.getId());
+            p.setString(5, incident.getId());
 
             p.executeUpdate();
         } catch (SQLException e) {
