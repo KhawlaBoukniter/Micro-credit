@@ -15,18 +15,19 @@ public class CreditDAO {
     }
 
     public void addCredit(Credit credit, String clientId) {
-        String sql = "INSERT INTO credit (client_id, date_credit, montant_demande, montant_octroye, taux_interet, duree_mois, type_credit, decision) " +
+        String sql = "INSERT INTO credit (id, client_id, date_credit, montant_demande, montant_octroye, taux_interet, duree_mois, type_credit, decision) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setString(1, clientId);
-            p.setDate(2, Date.valueOf(credit.getDateCredit()));
-            p.setDouble(3, credit.getMontantDemande());
-            p.setDouble(4, credit.getMontantOctroye());
-            p.setDouble(5, credit.getTauxInteret());
-            p.setInt(6, credit.getDureeMois());
-            p.setString(7, credit.getTypeCredit());
-            p.setString(8, credit.getDecision().name());
+            p.setString(1, credit.getId());
+            p.setString(2, clientId);
+            p.setDate(3, Date.valueOf(credit.getDateCredit()));
+            p.setDouble(4, credit.getMontantDemande());
+            p.setDouble(5, credit.getMontantOctroye());
+            p.setDouble(6, credit.getTauxInteret());
+            p.setInt(7, credit.getDureeMois());
+            p.setString(8, credit.getTypeCredit());
+            p.setString(9, credit.getDecision().name());
 
             p.executeUpdate();
         } catch (SQLException e) {
@@ -56,7 +57,7 @@ public class CreditDAO {
     public void deleteCredit(String creditId) {
         String sql = "DELETE FROM credit WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setString(2, creditId);
+            p.setString(1, creditId);
             p.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,21 +89,23 @@ public class CreditDAO {
         return credits;
     }
 
-    public Credit getByClient(String clientId) {
+    public List<Credit> getByClient(String clientId) {
         String sql = "SELECT * FROM credit WHERE client_id=?";
+        List<Credit> credits = new ArrayList<>();
+
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, clientId);
             ResultSet rs = p.executeQuery();
             if (rs.next()) {
-                return new Credit(
-                        rs.getDate("date_credit").toLocalDate(),
-                        rs.getDouble("montant_demande"),
-                        rs.getDouble("taux_interet"),
-                        rs.getInt("duree_mois"),
-                        rs.getString("type_credit"),
-                        rs.getDouble("montant_octroye"),
-                        Decision.valueOf(rs.getString("decision"))
-                );
+                 credits.add(new Credit(
+                         rs.getDate("date_credit").toLocalDate(),
+                         rs.getDouble("montant_demande"),
+                         rs.getDouble("taux_interet"),
+                         rs.getInt("duree_mois"),
+                         rs.getString("type_credit"),
+                         rs.getDouble("montant_octroye"),
+                         Decision.valueOf(rs.getString("decision"))
+                 ));
             }
         } catch (SQLException e) {
             e.printStackTrace();
