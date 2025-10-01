@@ -19,7 +19,7 @@ public class EmployeDAO {
     }
 
     public void addEmploye(Employe employe) {
-        String sql = "INSERT INTO employes (id, nom, prenom, date_naissance, ville, nombre_enfants, investissement, placement, situation_familiale, created_at, score, age, salaire, anciennete, poste, type_contrat, secteur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employes (id, nom, prenom, date_naissance, ville, nombre_enfants, investissement, placement, situation_familiale, created_at, score, age, salaire, anciennete, poste, type_contrat, secteur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, employe.getId());
