@@ -1,6 +1,7 @@
 package DAO;
 
 import Enums.Secteur;
+import Enums.SituationFamiliale;
 import Enums.TypeContrat;
 import Models.Employe;
 
@@ -18,24 +19,26 @@ public class EmployeDAO {
     }
 
     public void addEmploye(Employe employe) {
-        String sql = "INSERT INTO employes (nom, prenom, date_naissance, ville, nombre_enfants, investissement, placement, situation_familiale, created_at, score, salaire, anciennete, poste, type_contrat, secteur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO employes (id, nom, prenom, date_naissance, ville, nombre_enfants, investissement, placement, situation_familiale, created_at, score, age, salaire, anciennete, poste, type_contrat, secteur) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setString(1, employe.getNom());
-            p.setString(2, employe.getPrenom());
-            p.setDate(3, Date.valueOf(employe.getDateNaissance()));
-            p.setString(4, employe.getVille());
-            p.setInt(5, employe.getNombreEnfants());
-            p.setBoolean(6, employe.getInvestissement());
-            p.setBoolean(7, employe.getPlacement());
-            p.setString(8, employe.getSituationFamiliale());
-            p.setTimestamp(9,  Timestamp.valueOf(LocalDateTime.now()));
-            p.setInt(10, employe.getScore());
-            p.setDouble(11, employe.getSalaire());
-            p.setInt(12, employe.getAnciennete());
-            p.setString(13, employe.getPoste());
-            p.setObject(14, employe.getTypeContrat());
-            p.setObject(15, employe.getSecteur());
+            p.setString(1, employe.getId());
+            p.setString(2, employe.getNom());
+            p.setString(3, employe.getPrenom());
+            p.setDate(4, Date.valueOf(employe.getDateNaissance()));
+            p.setString(5, employe.getVille());
+            p.setInt(6, employe.getNombreEnfants());
+            p.setBoolean(7, employe.getInvestissement());
+            p.setBoolean(8, employe.getPlacement());
+            p.setObject(9, employe.getSituationFamiliale());
+            p.setTimestamp(10,  Timestamp.valueOf(LocalDateTime.now()));
+            p.setInt(11, employe.getScore());
+            p.setInt(12, employe.getAge());
+            p.setDouble(13, employe.getSalaire());
+            p.setInt(14, employe.getAnciennete());
+            p.setString(15, employe.getPoste());
+            p.setObject(16, employe.getTypeContrat());
+            p.setObject(17, employe.getSecteur());
 
             p.executeUpdate();
 
@@ -45,7 +48,7 @@ public class EmployeDAO {
     }
 
     public void updateEmploye(Employe employe) {
-        String sql = "UPDATE employes SET nom=?, prenom=?, date_naissance=?, ville=?, nombre_enfants=?, investissement=?, placement=?, situation_familiale=?, created_at=?, score=?, salaire=?, anciennete=?, poste=?, type_contrat=?, secteur=? WHERE id=?";
+        String sql = "UPDATE employes SET nom=?, prenom=?, date_naissance=?, ville=?, nombre_enfants=?, investissement=?, placement=?, situation_familiale=?, created_at=?, score=?, age=?, salaire=?, anciennete=?, poste=?, type_contrat=?, secteur=? WHERE id=?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, employe.getNom());
@@ -55,15 +58,16 @@ public class EmployeDAO {
             stmt.setInt(5, employe.getNombreEnfants());
             stmt.setBoolean(6, employe.getInvestissement());
             stmt.setBoolean(7, employe.getPlacement());
-            stmt.setString(8, employe.getSituationFamiliale());
+            stmt.setString(8, employe.getSituationFamiliale().name());
             stmt.setTimestamp(9, Timestamp.valueOf(employe.getCreatedAt()));
             stmt.setInt(10, employe.getScore());
-            stmt.setDouble(11, employe.getSalaire());
-            stmt.setInt(12, employe.getAnciennete());
-            stmt.setString(13, employe.getPoste());
-            stmt.setString(14, employe.getTypeContrat().name());
-            stmt.setString(15, employe.getSecteur().name());
-            stmt.setString(16, employe.getId());
+            stmt.setInt(11, employe.getAge());
+            stmt.setDouble(12, employe.getSalaire());
+            stmt.setInt(13, employe.getAnciennete());
+            stmt.setString(14, employe.getPoste());
+            stmt.setString(15, employe.getTypeContrat().name());
+            stmt.setString(16, employe.getSecteur().name());
+            stmt.setString(17, employe.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -97,7 +101,10 @@ public class EmployeDAO {
                     rs.getInt("nombre_enfants"),
                     rs.getBoolean("investissement"),
                     rs.getBoolean("placement"),
-                    rs.getString("situation_familiale"), rs.getTimestamp("created_at").toLocalDateTime(), rs.getInt("score"),
+                    SituationFamiliale.valueOf(rs.getString("situation_familiale")),
+                    rs.getTimestamp("created_at").toLocalDateTime(),
+                    rs.getInt("score"),
+                    rs.getInt("age"),
                     rs.getDouble("salaire"),
                     rs.getInt("anciennete"),
                     rs.getString("poste"),
