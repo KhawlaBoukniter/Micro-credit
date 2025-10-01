@@ -32,7 +32,7 @@ public abstract class Person {
         this.investissement = investissement;
         this.placement = placement;
         this.situationFamiliale = situationFamiliale;
-        this.createdAt = createdAt;
+        this.createdAt = LocalDateTime.now();
         this.score = score;
         this.age = age;
     }
