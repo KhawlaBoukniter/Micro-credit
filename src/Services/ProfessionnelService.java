@@ -19,16 +19,16 @@ public class ProfessionnelService {
     }
 
     public void addProfessionnel(Professionnel p) {
-        p.setScore(scoringService.calculScore(p));
+        p.setScore(scoringService.calculerScore(p));
         professionnelDAO.addProfessionnel(p);
     }
 
     public void updateProfessionnel(Professionnel p) {
-        p.setScore(scoringService.calculScore(p));
+        p.setScore(scoringService.calculerScore(p));
         professionnelDAO.updateProfessionnel(p);
     }
 
-    public void deleteProfessionnel(Integer id) {
+    public void deleteProfessionnel(String id) {
         professionnelDAO.deleteProfessionnel(id);
     }
 
@@ -36,7 +36,7 @@ public class ProfessionnelService {
         return professionnelDAO.getAll();
     }
 
-    public Optional<Professionnel> findProfessionnelById(Integer id) {
+    public Optional<Professionnel> findProfessionnelById(String id) {
         return professionnelDAO.getAll().stream()
                 .filter(p -> p.getId().equals(id))
                 .findFirst();
