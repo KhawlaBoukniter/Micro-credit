@@ -14,11 +14,12 @@ public class Incident {
 
     public Incident() {}
 
-    public Incident(LocalDate dateIncident, Echeance echeance, StatusPaiement typeIncident) {
+    public Incident(LocalDate dateIncident, Echeance echeance, Integer score, StatusPaiement typeIncident) {
         this.id = UUID.randomUUID().toString().split("-")[0];
         this.dateIncident = dateIncident;
         this.echeance = echeance;
         this.typeIncident = typeIncident;
+        this.score = score;
     }
 
     public String getId() {

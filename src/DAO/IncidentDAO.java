@@ -5,6 +5,7 @@ import Models.Echeance;
 import Models.Incident;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class IncidentDAO {
                 Incident incident = new Incident(
                         rs.getDate("date_incident").toLocalDate(),
                         echeance,
+                        rs.getInt("score"),
                         StatusPaiement.valueOf(rs.getString("type_incident"))
                 );
                 incident.setId(rs.getString("id"));
@@ -95,6 +97,7 @@ public class IncidentDAO {
                 return new Incident(
                         rs.getDate("date_incident").toLocalDate(),
                         echeance,
+                        rs.getInt("score"),
                         StatusPaiement.valueOf(rs.getString("type_incident"))
                 );
             }
