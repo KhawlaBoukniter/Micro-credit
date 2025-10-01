@@ -1,6 +1,7 @@
 package DAO;
 
 import Enums.SituationFamiliale;
+import Enums.TypeContrat;
 import Models.Professionnel;
 
 import java.sql.*;
@@ -16,7 +17,7 @@ public class ProfessionnelDAO {
     }
 
         public void addProfessionnel(Professionnel professionnel) {
-            String sql = "INSERT INTO professionnels (id, nom, prenom, date_naissance, ville, nombre_enfants, investissement, placement, situation_familiale, created_at, score, age, revenue, immatriculation_fiscale, secteur_activite, activite) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO professionnels (id, nom, prenom, date_naissance, ville, nombre_enfants, investissement, placement, situation_familiale, created_at, score, age, revenu, immatriculation_fiscale, secteur_activite, activite, statut_professionnel) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             try (PreparedStatement p = con.prepareStatement(sql)) {
                 p.setString(1, professionnel.getId());
@@ -35,7 +36,8 @@ public class ProfessionnelDAO {
                 p.setString(14, professionnel.getImmatriculationFiscale());
                 p.setString(15, professionnel.getSecteurActivite());
                 p.setString(16, professionnel.getActivite());
-                
+                p.setObject(17, professionnel.getStatut_professionnel());
+
                 p.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -43,7 +45,7 @@ public class ProfessionnelDAO {
         }
 
     public void updateProfessionnel(Professionnel professionnel) {
-        String sql = "UPDATE professionnels SET nom=?, prenom=?, date_naissance=?, ville=?, nombre_enfants=?, investissement=?, placement=?, situation_familiale=?, created_at=?, score=?, age=?, revenu=?, immatriculation_fiscale=?, secteur_activite=?, activite=? WHERE id=?";
+        String sql = "UPDATE professionnels SET nom=?, prenom=?, date_naissance=?, ville=?, nombre_enfants=?, investissement=?, placement=?, situation_familiale=?, created_at=?, score=?, age=?, revenu=?, immatriculation_fiscale=?, secteur_activite=?, activite=?, statut_professionnel=? WHERE id=?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, professionnel.getNom());
@@ -61,7 +63,8 @@ public class ProfessionnelDAO {
             stmt.setString(13, professionnel.getImmatriculationFiscale());
             stmt.setString(14, professionnel.getSecteurActivite());
             stmt.setString(15, professionnel.getActivite());
-            stmt.setString(16, professionnel.getId());
+            stmt.setString(16, professionnel.getStatut_professionnel().name());
+            stmt.setString(17, professionnel.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -102,7 +105,8 @@ public class ProfessionnelDAO {
                             rs.getDouble("revenu"),
                             rs.getString("immatriculation_fiscale"),
                             rs.getString("secteur_activite"),
-                            rs.getString("activite")
+                            rs.getString("activite"),
+                            TypeContrat.valueOf(rs.getString("statut_professionnel"))
                     );
                     professionnels.add(professionnel);
                 }
