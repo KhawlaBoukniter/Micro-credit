@@ -4,7 +4,6 @@ import Enums.Decision;
 import Models.Credit;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,12 +14,12 @@ public class CreditDAO {
         this.con = Database.getConnection();
     }
 
-    public void addCredit(Credit credit, Integer clientId) {
+    public void addCredit(Credit credit, String clientId) {
         String sql = "INSERT INTO credit (client_id, date_credit, montant_demande, montant_octroye, taux_interet, duree_mois, type_credit, decision) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, clientId);
+            p.setString(1, clientId);
             p.setDate(2, Date.valueOf(credit.getDateCredit()));
             p.setDouble(3, credit.getMontantDemande());
             p.setDouble(4, credit.getMontantOctroye());
@@ -35,9 +34,9 @@ public class CreditDAO {
         }
     }
 
-    public void updateCredit(Credit credit, String clientType, Integer clientId) {
+    public void updateCredit(Credit credit) {
         String sql = "UPDATE credit SET date_credit=?, montant_demande=?, montant_octroye=?, taux_interet=?, duree_mois=?, type_credit=?, decision=? " +
-                "WHERE client_id=?";
+                "WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setDate(1, Date.valueOf(credit.getDateCredit()));
             p.setDouble(2, credit.getMontantDemande());
@@ -46,7 +45,7 @@ public class CreditDAO {
             p.setInt(5, credit.getDureeMois());
             p.setString(6, credit.getTypeCredit());
             p.setString(7, credit.getDecision().name());
-            p.setInt(8, clientId);
+            p.setString(8, credit.getId());
 
             p.executeUpdate();
         } catch (SQLException e) {
@@ -54,11 +53,10 @@ public class CreditDAO {
         }
     }
 
-    public void deleteCredit(String clientType, Integer clientId) {
-        String sql = "DELETE FROM credit WHERE client_id=?";
+    public void deleteCredit(String creditId) {
+        String sql = "DELETE FROM credit WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setString(1, clientType);
-            p.setInt(2, clientId);
+            p.setString(2, creditId);
             p.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -90,10 +88,10 @@ public class CreditDAO {
         return credits;
     }
 
-    public Credit getByClient(String clientType, Integer clientId) {
+    public Credit getByClient(String clientId) {
         String sql = "SELECT * FROM credit WHERE client_id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, clientId);
+            p.setString(1, clientId);
             ResultSet rs = p.executeQuery();
             if (rs.next()) {
                 return new Credit(
@@ -112,11 +110,11 @@ public class CreditDAO {
         return null;
     }
 
-    public Credit getById(Integer id) {
+    public Credit getById(String id) {
         String sql = "SELECT * FROM credit WHERE id = ?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 Credit credit = new Credit(
@@ -133,5 +131,6 @@ public class CreditDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;    }
+        return null;
+    }
 }
