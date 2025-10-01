@@ -1,0 +1,10 @@
+package Enums;
+
+public enum TypeContrat {
+    CDI_PUBLIC,
+    CDI_PRIVE_GRANDE_ENTREPRISE,
+    CDI_PRIVE_PME,
+    CDD_INTERIM,
+    PROFESSION_LIBERALE_STABLE,
+    AUTO_ENTREPRENEUR
+}
