@@ -5,7 +5,6 @@ import Models.Echeance;
 import Models.Incident;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class IncidentDAO {
     }
 
     public void addIncident(Incident incident) {
-        String sql = "INSERT INTO incident (id, date_incident, score, echeance_id, type_incident) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO incident (id, date_incident, score, echeance_id, type_incident) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, incident.getId());
@@ -73,10 +72,9 @@ public class IncidentDAO {
                 Incident incident = new Incident(
                         rs.getDate("date_incident").toLocalDate(),
                         echeance,
-                        rs.getInt("score"),
                         StatusPaiement.valueOf(rs.getString("type_incident"))
                 );
-
+                incident.setId(rs.getString("id"));
                 incidents.add(incident);
             }
         } catch (SQLException e) {
@@ -97,7 +95,6 @@ public class IncidentDAO {
                 return new Incident(
                         rs.getDate("date_incident").toLocalDate(),
                         echeance,
-                        rs.getInt("score"),
                         StatusPaiement.valueOf(rs.getString("type_incident"))
                 );
             }
