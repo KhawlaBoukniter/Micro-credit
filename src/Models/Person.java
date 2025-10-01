@@ -1,5 +1,7 @@
 package Models;
 
+import Enums.SituationFamiliale;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,13 +15,14 @@ public abstract class Person {
     private Integer nombreEnfants;
     private Boolean investissement;
     private Boolean placement;
-    private String situationFamiliale;
+    private SituationFamiliale situationFamiliale;
     private LocalDateTime createdAt;
     private Integer score;
+    private Integer age;
 
     public Person() {}
 
-    public Person(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, String situationFamiliale, LocalDateTime createdAt, Integer score) {
+    public Person(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, SituationFamiliale situationFamiliale, LocalDateTime createdAt, Integer score, Integer age) {
         this.id = UUID.randomUUID().toString().split("-")[0];
         this.nom = nom;
         this.prenom = prenom;
@@ -31,6 +34,7 @@ public abstract class Person {
         this.situationFamiliale = situationFamiliale;
         this.createdAt = createdAt;
         this.score = score;
+        this.age = age;
     }
 
     public String  getId() {
@@ -97,11 +101,11 @@ public abstract class Person {
         this.placement = placement;
     }
 
-    public String getSituationFamiliale() {
+    public SituationFamiliale getSituationFamiliale() {
         return situationFamiliale;
     }
 
-    public void setSituationFamiliale(String situationFamiliale) {
+    public void setSituationFamiliale(SituationFamiliale situationFamiliale) {
         this.situationFamiliale = situationFamiliale;
     }
 
@@ -121,6 +125,14 @@ public abstract class Person {
         this.score = score;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -135,6 +147,7 @@ public abstract class Person {
                 ", situationFamiliale='" + situationFamiliale + '\'' +
                 ", createdAt=" + createdAt +
                 ", score=" + score +
+                ", age=" + age +
                 '}';
     }
 }

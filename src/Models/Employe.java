@@ -1,6 +1,7 @@
 package Models;
 
 import Enums.Secteur;
+import Enums.SituationFamiliale;
 import Enums.TypeContrat;
 
 import java.time.LocalDate;
@@ -23,8 +24,8 @@ public class Employe extends Person {
         this.secteur = secteur;
     }
 
-    public Employe(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, String situationFamiliale, LocalDateTime createdAt, Integer score, Double salaire, Integer anciennete, String poste, TypeContrat typeContrat, Secteur secteur) {
-        super(nom, prenom, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+    public Employe(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, SituationFamiliale situationFamiliale, LocalDateTime createdAt, Integer score, Integer age, Double salaire, Integer anciennete, String poste, TypeContrat typeContrat, Secteur secteur) {
+        super(nom, prenom, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, age);
         this.salaire = salaire;
         this.anciennete = anciennete;
         this.poste = poste;

@@ -1,5 +1,7 @@
 package Models;
 
+import Enums.SituationFamiliale;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,8 +18,8 @@ public class Professionnel extends Person {
         this.activite = activite;
     }
 
-    public Professionnel(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, String situationFamiliale, LocalDateTime createdAt, Integer score, Double revenu, String immatriculationFiscale, String secteurActivite, String activite) {
-        super(nom, prenom, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score);
+    public Professionnel(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, SituationFamiliale situationFamiliale, LocalDateTime createdAt, Integer score, Integer age, Double revenu, String immatriculationFiscale, String secteurActivite, String activite) {
+        super(nom, prenom, dateNaissance, ville, nombreEnfants, investissement, placement, situationFamiliale, createdAt, score, age);
         this.revenu = revenu;
         this.immatriculationFiscale = immatriculationFiscale;
         this.secteurActivite = secteurActivite;
