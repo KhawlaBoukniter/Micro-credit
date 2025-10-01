@@ -19,16 +19,17 @@ public class EmployeService {
     }
 
     public void addEmploye(Employe e) {
-        e.setScore(scoringService.calculScore(e));
+        Integer score = scoringService.calculerScore(e);
+        e.setScore(score);
         employeDAO.addEmploye(e);
     }
 
     public void updateEmploye(Employe e) {
-        e.setScore(scoringService.calculScore(e));
+        e.setScore(scoringService.calculerScore(e));
         employeDAO.updateEmploye(e);
     }
 
-    public void deleteEmploye(Integer id) {
+    public void deleteEmploye(String id) {
         employeDAO.deleteEmploye(id);
     }
 
@@ -36,7 +37,7 @@ public class EmployeService {
         return employeDAO.getAll();
     }
 
-    public Optional<Employe> findEmployeById(Integer id) {
+    public Optional<Employe> findEmployeById(String id) {
         return employeDAO.getAll().stream()
                 .filter(e -> e.getId().equals(id))
                 .findFirst();
@@ -49,5 +50,6 @@ public class EmployeService {
                         .thenComparing(Comparator.comparing(Employe::getAnciennete).reversed()))
                 .collect(Collectors.toList());
     }
+
 
 }
