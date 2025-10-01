@@ -2,9 +2,10 @@ package Models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public abstract class Person {
-    private Integer id;
+    private String id;
     private String nom;
     private String prenom;
     private LocalDate dateNaissance;
@@ -19,6 +20,7 @@ public abstract class Person {
     public Person() {}
 
     public Person(String nom, String prenom, LocalDate dateNaissance, String ville, Integer nombreEnfants, Boolean investissement, Boolean placement, String situationFamiliale, LocalDateTime createdAt, Integer score) {
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.nom = nom;
         this.prenom = prenom;
         this.dateNaissance = dateNaissance;
@@ -31,11 +33,11 @@ public abstract class Person {
         this.score = score;
     }
 
-    public Integer getId() {
+    public String  getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

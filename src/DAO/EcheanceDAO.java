@@ -20,7 +20,7 @@ public class EcheanceDAO {
         String sql = "INSERT INTO echeances (credit_id, date_echeance, mensualite, date_paiement, status_paiement) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, echeance.getCredit().getId());
+            p.setString(1, echeance.getCredit().getId());
             p.setDate(2, Date.valueOf(echeance.getDateEcheance()));
             p.setDouble(3, echeance.getMensualite());
             p.setDate(4, Date.valueOf(echeance.getDatePaiement()));
@@ -30,7 +30,7 @@ public class EcheanceDAO {
 
             ResultSet rs = p.getGeneratedKeys();
             if (rs.next()) {
-                echeance.setId(rs.getInt(1));
+                echeance.setId(rs.getString(1));
             }
 
         } catch (SQLException e) {
@@ -42,12 +42,12 @@ public class EcheanceDAO {
         String sql = "UPDATE echeances SET credit_id=?, date_echeance=?, mensualite=?, date_paiement=?, status_paiement=? WHERE id=?";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, echeance.getCredit().getId());
+            p.setString(1, echeance.getCredit().getId());
             p.setDate(2, Date.valueOf(echeance.getDateEcheance()));
             p.setDouble(3, echeance.getMensualite());
             p.setDate(4, Date.valueOf(echeance.getDatePaiement()));
             p.setString(5, echeance.getStatusPaiement().name());
-            p.setInt(6, echeance.getId());
+            p.setString(6, echeance.getId());
 
             p.executeUpdate();
         } catch (SQLException e) {
@@ -55,11 +55,11 @@ public class EcheanceDAO {
         }
     }
 
-    public void deleteEcheance(Integer id) {
+    public void deleteEcheance(String id) {
         String sql = "DELETE FROM echeances WHERE id=?";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, id);
+            p.setString(1, id);
             p.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -74,14 +74,14 @@ public class EcheanceDAO {
             ResultSet rs = p.executeQuery();
             CreditDAO creditDAO = new CreditDAO();
             while (rs.next()) {
-                Credit credit = creditDAO.getById(rs.getInt("credit_id"));
+                Credit credit = creditDAO.getById(rs.getString("credit_id"));
                 Echeance e = new Echeance(
                         rs.getDate("date_echeance").toLocalDate(),
                         rs.getDouble("mensualite"),
                         rs.getDate("date_paiement").toLocalDate(),
                         StatusPaiement.valueOf(rs.getString("status_paiement"))
                 );
-                e.setId(rs.getInt("id"));
+                e.setId(rs.getString("id"));
                 e.setCredit(credit);
                 echeances.add(e);
             }
@@ -91,21 +91,21 @@ public class EcheanceDAO {
         return echeances;
     }
 
-    public Echeance getById(Integer id) {
+    public Echeance getById(String id) {
         String sql = "SELECT * FROM echeances WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, id);
+            p.setString(1, id);
             ResultSet rs = p.executeQuery();
             if (rs.next()) {
                 CreditDAO creditDAO = new CreditDAO();
-                Credit credit = creditDAO.getById(rs.getInt("credit_id"));
+                Credit credit = creditDAO.getById(rs.getString("credit_id"));
                 Echeance e = new Echeance(
                         rs.getDate("date_echeance").toLocalDate(),
                         rs.getDouble("mensualite"),
                         rs.getDate("date_paiement") != null ? rs.getDate("date_paiement").toLocalDate() : null,
                         StatusPaiement.valueOf(rs.getString("status_paiement"))
                 );
-                e.setId(rs.getInt("id"));
+                e.setId(rs.getString("id"));
                 e.setCredit(credit);
                 return e;
             }

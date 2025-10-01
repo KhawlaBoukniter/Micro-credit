@@ -57,7 +57,7 @@ public class ProfessionnelDAO {
             stmt.setString(12, professionnel.getImmatriculationFiscale());
             stmt.setString(13, professionnel.getSecteurActivite());
             stmt.setString(14, professionnel.getActivite());
-            stmt.setInt(15, professionnel.getId());
+            stmt.setString(15, professionnel.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -65,11 +65,11 @@ public class ProfessionnelDAO {
         }
     }
 
-        public void deleteProfessionnel(Integer id) {
+        public void deleteProfessionnel(String id) {
             String sql = "DELETE FROM professionnels WHERE id = ?";
 
             try (PreparedStatement p = con.prepareStatement(sql)){
-                p.setInt(1, id);
+                p.setString(1, id);
                 p.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -84,7 +84,6 @@ public class ProfessionnelDAO {
                 ResultSet rs = p.executeQuery();
                 while (rs.next()) {
                     Professionnel professionnel = new Professionnel(
-                            rs.getInt("id"),
                             rs.getString("nom"),
                             rs.getString("prenom"),
                             rs.getDate("date_naissance").toLocalDate(),

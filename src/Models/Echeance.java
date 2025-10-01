@@ -3,9 +3,10 @@ package Models;
 import Enums.StatusPaiement;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Echeance {
-    private Integer id;
+    private String id;
     private LocalDate dateEcheance;
     private Double mensualite;
     private LocalDate datePaiement;
@@ -15,17 +16,18 @@ public class Echeance {
     public Echeance() {}
 
     public Echeance(LocalDate dateEcheance, Double mensualite, LocalDate datePaiement, StatusPaiement statusPaiement) {
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.dateEcheance = dateEcheance;
         this.mensualite = mensualite;
         this.datePaiement = datePaiement;
         this.statusPaiement = statusPaiement;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

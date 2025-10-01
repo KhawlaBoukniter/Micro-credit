@@ -3,9 +3,10 @@ package Models;
 import Enums.Decision;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Credit {
-    private Integer id;
+    private String id;
     private LocalDate dateCredit;
     private Double montantDemande;
     private Double tauxInteret;
@@ -18,6 +19,7 @@ public class Credit {
     public Credit() {}
 
     public Credit(LocalDate dateCredit, Double montantDemande, Double tauxInteret, Integer dureeMois, String typeCredit, Double montantOctroye, Decision decision) {
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.dateCredit = dateCredit;
         this.montantDemande = montantDemande;
         this.tauxInteret = tauxInteret;
@@ -25,14 +27,13 @@ public class Credit {
         this.typeCredit = typeCredit;
         this.montantOctroye = montantOctroye;
         this.decision = decision;
-        this.client = client;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

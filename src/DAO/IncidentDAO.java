@@ -24,7 +24,7 @@ public class IncidentDAO {
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setDate(1, Date.valueOf(incident.getDateIncident()));
             p.setInt(2, incident.getScore());
-            p.setInt(3, incident.getEcheance().getId());
+            p.setString(3, incident.getEcheance().getId());
             p.setString(4, incident.getTypeIncident().name());
 
             p.executeUpdate();
@@ -39,9 +39,9 @@ public class IncidentDAO {
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setDate(1, Date.valueOf(incident.getDateIncident()));
             p.setInt(2, incident.getScore());
-            p.setInt(3, incident.getEcheance().getId());
+            p.setString(3, incident.getEcheance().getId());
             p.setString(4, incident.getTypeIncident().name());
-            p.setInt(6, incident.getEcheance().getId());
+            p.setString(6, incident.getId());
 
             p.executeUpdate();
         } catch (SQLException e) {
@@ -49,11 +49,11 @@ public class IncidentDAO {
         }
     }
 
-    public void deleteIncident(Integer id) {
+    public void deleteIncident(String id) {
         String sql = "DELETE FROM incident WHERE id=?";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, id);
+            p.setString(1, id);
             p.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +67,7 @@ public class IncidentDAO {
         try (PreparedStatement p = con.prepareStatement(sql)) {
             ResultSet rs = p.executeQuery();
             while (rs.next()) {
-                Echeance echeance = echeanceDAO.getById(rs.getInt("echeance_id"));
+                Echeance echeance = echeanceDAO.getById(rs.getString("echeance_id"));
 
                 Incident incident = new Incident(
                         rs.getDate("date_incident").toLocalDate(),
@@ -85,14 +85,14 @@ public class IncidentDAO {
         return incidents;
     }
 
-    public Incident getById(Integer id) {
+    public Incident getById(String id) {
         String sql = "SELECT * FROM incident WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
-            p.setInt(1, id);
+            p.setString(1, id);
             ResultSet rs = p.executeQuery();
 
             if (rs.next()) {
-                Echeance echeance = echeanceDAO.getById(rs.getInt("echeance_id"));
+                Echeance echeance = echeanceDAO.getById(rs.getString("echeance_id"));
                 return new Incident(
                         rs.getDate("date_incident").toLocalDate(),
                         echeance,

@@ -3,8 +3,10 @@ package Models;
 import Enums.StatusPaiement;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Incident {
+    private String id;
     private LocalDate dateIncident;
     private Echeance echeance;
     private Integer score;
@@ -13,10 +15,19 @@ public class Incident {
     public Incident() {}
 
     public Incident(LocalDate dateIncident, Echeance echeance, Integer score, StatusPaiement typeIncident) {
+        this.id = UUID.randomUUID().toString().split("-")[0];
         this.dateIncident = dateIncident;
         this.echeance = echeance;
         this.score = score;
         this.typeIncident = typeIncident;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public LocalDate getDateIncident() {

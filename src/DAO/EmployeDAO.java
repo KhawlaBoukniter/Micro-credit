@@ -1,6 +1,7 @@
 package DAO;
 
 import Enums.Secteur;
+import Enums.TypeContrat;
 import Models.Employe;
 
 import java.sql.*;
@@ -33,7 +34,7 @@ public class EmployeDAO {
             p.setDouble(11, employe.getSalaire());
             p.setInt(12, employe.getAnciennete());
             p.setString(13, employe.getPoste());
-            p.setString(14, employe.getTypeContrat());
+            p.setObject(14, employe.getTypeContrat());
             p.setObject(15, employe.getSecteur());
 
             p.executeUpdate();
@@ -60,9 +61,9 @@ public class EmployeDAO {
             stmt.setDouble(11, employe.getSalaire());
             stmt.setInt(12, employe.getAnciennete());
             stmt.setString(13, employe.getPoste());
-            stmt.setString(14, employe.getTypeContrat());
+            stmt.setString(14, employe.getTypeContrat().name());
             stmt.setString(15, employe.getSecteur().name());
-            stmt.setInt(16, employe.getId());
+            stmt.setString(16, employe.getId());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -70,11 +71,11 @@ public class EmployeDAO {
         }
     }
 
-    public void deleteEmploye(int id) {
+    public void deleteEmploye(String id) {
         String sql = "DELETE FROM employes WHERE id = ?";
 
         try (PreparedStatement p = con.prepareStatement(sql)){
-            p.setInt(1, id);
+            p.setString(1, id);
             p.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -100,10 +101,10 @@ public class EmployeDAO {
                     rs.getDouble("salaire"),
                     rs.getInt("anciennete"),
                     rs.getString("poste"),
-                    rs.getString("type_contrat"),
+                    TypeContrat.valueOf(rs.getString("type_contrat")),
                     Secteur.valueOf(rs.getString("secteur"))
                 );
-                employe.setId(rs.getInt("id"));
+                employe.setId(rs.getString("id"));
                 employes.add(employe);
             }
         } catch (SQLException e) {
