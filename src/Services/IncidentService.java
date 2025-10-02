@@ -66,4 +66,10 @@ public class IncidentService {
                 .filter(i -> i.getTypeIncident().equals(StatusPaiement.IMPAYE_NON_REGLE))
                 .count();
     }
+
+    public Long getByLatestClientCredit(List<Incident> incidents, String latestCreditId) {
+        return incidents.stream()
+                    .filter(i -> i.getEcheance().getCredit().getId().equals(latestCreditId))
+                    .count();
+    }
 }
