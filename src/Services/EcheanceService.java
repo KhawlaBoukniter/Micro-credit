@@ -47,31 +47,44 @@ public class EcheanceService {
     }
 
     public void enregistrerPaiement(Echeance echeance, LocalDate datePaiement) {
-        echeance.setDatePaiement(datePaiement);
+        if (datePaiement == null) {
+            echeance.setStatusPaiement(StatusPaiement.IMPAYE_NON_REGLE);
+            echeanceDAO.updateEcheance(echeance);
 
-        Long joursRetard = java.time.temporal.ChronoUnit.DAYS.between(echeance.getDateEcheance(), datePaiement);
-
-        if (joursRetard <= 5) echeance.setStatusPaiement(StatusPaiement.PAYE_A_TEMPS);
-        else if (joursRetard <= 30) echeance.setStatusPaiement(StatusPaiement.PAYE_EN_RETARD);
-        else echeance.setStatusPaiement(StatusPaiement.IMPAYE_REGLE);
-
-        echeanceDAO.updateEcheance(echeance);
-
-        if (echeance.getStatusPaiement() != StatusPaiement.PAYE_A_TEMPS) {
             Incident incident = new Incident(
-                  datePaiement,
-                  echeance,
-                  scoringService.calculerScoreIncident(echeance),
-                  echeance.getStatusPaiement()
+                    LocalDate.now(),
+                    echeance,
+                    scoringService.calculerScoreIncident(echeance),
+                    StatusPaiement.IMPAYE_NON_REGLE
             );
             incidentDAO.addIncident(incident);
             scoringService.calculerScore(echeance.getCredit().getClient());
+        } else {
+            echeance.setDatePaiement(datePaiement);
 
+            Long joursRetard = java.time.temporal.ChronoUnit.DAYS.between(echeance.getDateEcheance(), datePaiement);
+
+            if (joursRetard <= 5) echeance.setStatusPaiement(StatusPaiement.PAYE_A_TEMPS);
+            else if (joursRetard <= 30) echeance.setStatusPaiement(StatusPaiement.PAYE_EN_RETARD);
+            else echeance.setStatusPaiement(StatusPaiement.IMPAYE_REGLE);
+
+            echeanceDAO.updateEcheance(echeance);
+
+            if (echeance.getStatusPaiement() != StatusPaiement.PAYE_A_TEMPS) {
+                Incident incident = new Incident(
+                        datePaiement,
+                        echeance,
+                        scoringService.calculerScoreIncident(echeance),
+                        echeance.getStatusPaiement()
+                );
+                incidentDAO.addIncident(incident);
+                scoringService.calculerScore(echeance.getCredit().getClient());
+
+            }
+
+            Person client = echeance.getCredit().getClient();
+            client.setScore(scoringService.calculerScore(client));
         }
-
-        Person client = echeance.getCredit().getClient();
-        client.setScore(scoringService.calculerScore(client));
-
     }
 
     public List<Echeance> getEcheancesByCredit(Credit credit) {
