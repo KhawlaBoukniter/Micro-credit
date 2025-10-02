@@ -19,12 +19,14 @@ public class ScoringService {
     private CreditDAO creditDAO;
     private EcheanceDAO echeanceDAO;
     private IncidentService incidentService;
+    private CreditService creditService;
 
     public ScoringService() {
         this.incidentDAO = new IncidentDAO();
         this.creditDAO = new CreditDAO();
         this.echeanceDAO = new EcheanceDAO();
         this.incidentService = new IncidentService();
+        this.creditService = new CreditService();
     }
 
     public Integer calculerScore(Person client) {
@@ -159,12 +161,19 @@ public class ScoringService {
             List<Incident> incidents = incidentService.getIncidentsByClient(client);
             Long nbrImpayeN = incidentService.getImpayeNonRegle(incidents);
             Long nbrImpayeR = incidentService.getImpayeRegle(incidents);
-            Long nbrRetards = incidentService.incidentsEnRetard(incidents);
+
+            Long nbrRetards = 0L;
+            Optional<Credit> latestCredit = creditService.getLatestCreditByClient(client.getId());
+            if (latestCredit.isPresent()) {
+                String latestCreditId = latestCredit.get().getId();
+                nbrRetards = incidentService.getByLatestClientCredit(incidents, latestCreditId);
+            }
 
             if (nbrRetards == 0 && incidents.isEmpty()) rslt += 10;
             else {
                 if (nbrRetards >= 1 && nbrRetards <= 3) rslt -= 3;
                 else if (nbrRetards >= 4) rslt -= 5;
+
                 if (nbrImpayeR > 0) rslt += 5;
                 if (nbrImpayeN > 0) rslt -= 10;
             }
