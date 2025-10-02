@@ -1,6 +1,7 @@
 package Services;
 
 import DAO.IncidentDAO;
+import Enums.StatusPaiement;
 import Models.Incident;
 import Models.Person;
 
@@ -48,5 +49,21 @@ public class IncidentService {
                     .collect(Collectors.toList());
         }
 
+        public Long incidentsEnRetard(List<Incident> incidents) {
+            return incidents.stream()
+                    .filter(i -> i.getTypeIncident().equals(StatusPaiement.EN_RETARD))
+                    .count();
+        }
 
+        public Long getImpayeRegle(List<Incident> incidents) {
+            return incidents.stream()
+                    .filter(i -> i.getTypeIncident().equals(StatusPaiement.IMPAYE_REGLE))
+                    .count();
+        }
+
+    public Long getImpayeNonRegle(List<Incident> incidents) {
+        return incidents.stream()
+                .filter(i -> i.getTypeIncident().equals(StatusPaiement.IMPAYE_NON_REGLE))
+                .count();
+    }
 }
