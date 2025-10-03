@@ -13,9 +13,9 @@ public class ProfessionnelService {
     private ProfessionnelDAO professionnelDAO;
     private ScoringService scoringService;
 
-    public ProfessionnelService() {
-        this.professionnelDAO = new ProfessionnelDAO();
-        this.scoringService = new ScoringService();
+    public ProfessionnelService(ProfessionnelDAO professionnelDAO, ScoringService scoringService) {
+        this.professionnelDAO = professionnelDAO;
+        this.scoringService = scoringService;
     }
 
     public void addProfessionnel(Professionnel p) {
@@ -36,10 +36,10 @@ public class ProfessionnelService {
         return professionnelDAO.getAll();
     }
 
-    public Optional<Professionnel> findProfessionnelById(String id) {
+    public Professionnel findProfessionnelById(String id) {
         return professionnelDAO.getAll().stream()
                 .filter(p -> p.getId().equals(id))
-                .findFirst();
+                .findFirst().orElse(null);
     }
 
     public List<Professionnel> getSortedProfessionnels() {
