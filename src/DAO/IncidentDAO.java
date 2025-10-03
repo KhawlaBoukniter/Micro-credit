@@ -19,7 +19,7 @@ public class IncidentDAO {
     }
 
     public void addIncident(Incident incident) {
-        String sql = "INSERT INTO incident (id, date_incident, score, echeance_id, type_incident) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO incidents (id, date_incident, score, echeance_id, type_incident) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, incident.getId());
@@ -35,7 +35,7 @@ public class IncidentDAO {
     }
 
     public void updateIncident(Incident incident) {
-        String sql = "UPDATE incident SET date_incident=?, score=?, echeance_id=?, type_incident=? WHERE id=?";
+        String sql = "UPDATE incidents SET date_incident=?, score=?, echeance_id=?, type_incident=? WHERE id=?";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setDate(1, Date.valueOf(incident.getDateIncident()));
@@ -51,7 +51,7 @@ public class IncidentDAO {
     }
 
     public void deleteIncident(String id) {
-        String sql = "DELETE FROM incident WHERE id=?";
+        String sql = "DELETE FROM incidents WHERE id=?";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, id);
@@ -62,7 +62,7 @@ public class IncidentDAO {
     }
 
     public List<Incident> getAll() {
-        String sql = "SELECT * FROM incident";
+        String sql = "SELECT * FROM incidents";
         List<Incident> incidents = new ArrayList<>();
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
@@ -87,7 +87,7 @@ public class IncidentDAO {
     }
 
     public Incident getById(String id) {
-        String sql = "SELECT * FROM incident WHERE id=?";
+        String sql = "SELECT * FROM incidents WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, id);
             ResultSet rs = p.executeQuery();
