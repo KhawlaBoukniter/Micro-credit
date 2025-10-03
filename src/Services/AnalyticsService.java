@@ -80,4 +80,44 @@ public class AnalyticsService {
                 .collect(Collectors.toList());
     }
 
+    public Map<TypeContrat, Map<String, Double>> getClientsByEmploi() {
+        List<Person> allClients = new ArrayList<>();
+        allClients.addAll(employeService.getAllEmployes());
+        allClients.addAll(professionnelService.getAllProfessionnels());
+
+        Map<TypeContrat, List<Person>> allClientsGrouped = allClients.stream()
+                .filter(c -> c instanceof Employe || c instanceof Professionnel)
+                .collect(Collectors.groupingBy(c -> {
+                    if (c instanceof Employe) return ((Employe) c).getTypeContrat();
+                    else return ((Professionnel) c).getStatut_professionnel();
+                }));
+
+        Map<TypeContrat, Map<String, Double>> stats = new HashMap<>();
+        allClientsGrouped.forEach((typeContrat, clients) -> {
+            Integer nbrClients = clients.size();
+            Double scoreMoyen = clients.stream().mapToInt(Person::getScore).average().orElse(0);
+            Double revenusMoyen = clients.stream().mapToDouble(c -> {
+                if (c instanceof Employe) return ((Employe) c).getSalaire();
+                if (c instanceof Professionnel) return ((Professionnel) c).getRevenu();
+                return 0;
+            }).average().orElse(0);
+
+            Long nbrCreditsAcc = clients.stream()
+                    .flatMap(c -> creditService.getCreditsByClient(c.getId()).stream())
+                    .filter(cr -> cr.getDecision().equals(Decision.ACCORD_IMMEDIAT))
+                    .count();
+
+            Double taux = nbrClients > 0 ? (nbrCreditsAcc * 100.0 / nbrClients) : 0;
+
+            Map<String, Double> subStats = new HashMap<>();
+            subStats.put("nbrClients", (double) nbrClients);
+            subStats.put("scoreMoyen", scoreMoyen);
+            subStats.put("revenusMoyens", revenusMoyen);
+            subStats.put("taux", taux);
+
+            stats.put(typeContrat, subStats);
+        });
+
+        return stats;
+    }
 }
