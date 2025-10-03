@@ -21,8 +21,8 @@ public class CreditDAO {
     }
 
     public void addCredit(Credit credit, String clientId) {
-        String sql = "INSERT INTO credit (id, client_id, date_credit, montant_demande, montant_octroye, taux_interet, duree_mois, type_credit, decision) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO credits (id, client_id, date_credit, montant_demande, montant_octroye, taux_interet, duree_mois, type_credit, decision) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, credit.getId());
@@ -42,7 +42,7 @@ public class CreditDAO {
     }
 
     public void updateCredit(Credit credit) {
-        String sql = "UPDATE credit SET date_credit=?, montant_demande=?, montant_octroye=?, taux_interet=?, duree_mois=?, type_credit=?, decision=? " +
+        String sql = "UPDATE credits SET date_credit=?, montant_demande=?, montant_octroye=?, taux_interet=?, duree_mois=?, type_credit=?, decision=? " +
                 "WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setDate(1, Date.valueOf(credit.getDateCredit()));
@@ -61,7 +61,7 @@ public class CreditDAO {
     }
 
     public void deleteCredit(String creditId) {
-        String sql = "DELETE FROM credit WHERE id=?";
+        String sql = "DELETE FROM credits WHERE id=?";
         try (PreparedStatement p = con.prepareStatement(sql)) {
             p.setString(1, creditId);
             p.executeUpdate();
@@ -71,7 +71,7 @@ public class CreditDAO {
     }
 
     public List<Credit> getAll() {
-        String sql = "SELECT * FROM credit";
+        String sql = "SELECT * FROM credits";
         List<Credit> credits = new ArrayList<>();
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
@@ -101,7 +101,7 @@ public class CreditDAO {
 
     private Person hydrateClient(String clientId) {
         try  {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM employe WHERE id = ?");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM employes WHERE id = ?");
             ps.setString(1, clientId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -121,13 +121,13 @@ public class CreditDAO {
                         rs.getInt("anciennete"),
                         rs.getString("poste"),
                         TypeContrat.valueOf(rs.getString("type_contrat")),
-                        Secteur.valueOf(rs.getString("secteur"))
+                        Secteur.valueOf(rs.getString("secteur").toUpperCase())
                 );
                 e.setId(rs.getString("id"));
                 return e;
             }
 
-            ps = con.prepareStatement("SELECT * FROM professionnel WHERE id = ?");
+            ps = con.prepareStatement("SELECT * FROM professionnels WHERE id = ?");
             ps.setString(1, clientId);
             rs = ps.executeQuery();
             if (rs.next()) {
@@ -159,7 +159,7 @@ public class CreditDAO {
     }
 
     public List<Credit> getByClient(String clientId) {
-        String sql = "SELECT * FROM credit WHERE client_id=?";
+        String sql = "SELECT * FROM credits WHERE client_id=?";
         List<Credit> credits = new ArrayList<>();
 
         try (PreparedStatement p = con.prepareStatement(sql)) {
@@ -186,7 +186,7 @@ public class CreditDAO {
     }
 
     public Credit getById(String id) {
-        String sql = "SELECT * FROM credit WHERE id = ?";
+        String sql = "SELECT * FROM credits WHERE id = ?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, id);
