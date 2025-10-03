@@ -13,7 +13,7 @@ public class Echeance {
     private StatusPaiement statusPaiement;
     private Credit credit;
 
-    public Echeance() {}
+    public Echeance() { this.id = UUID.randomUUID().toString().split("-")[0]; }
 
     public Echeance(LocalDate dateEcheance, Double mensualite, LocalDate datePaiement, StatusPaiement statusPaiement) {
         this.id = UUID.randomUUID().toString().split("-")[0];

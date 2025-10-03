@@ -16,7 +16,9 @@ public class Credit {
     private Decision decision;
     private Person client;
 
-    public Credit() {}
+    public Credit() {
+        this.id = UUID.randomUUID().toString().split("-")[0];
+    }
 
     public Credit(LocalDate dateCredit, Double montantDemande, Double tauxInteret, Integer dureeMois, String typeCredit, Double montantOctroye, Decision decision) {
         this.id = UUID.randomUUID().toString().split("-")[0];
