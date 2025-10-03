@@ -13,9 +13,9 @@ public class EmployeService {
     private EmployeDAO employeDAO;
     private ScoringService scoringService;
 
-    public EmployeService() {
-        this.employeDAO = new EmployeDAO();
-        this.scoringService = new ScoringService();
+    public EmployeService(EmployeDAO employeDAO, ScoringService scoringService) {
+        this.employeDAO = employeDAO;
+        this.scoringService = scoringService;
     }
 
     public void addEmploye(Employe e) {
@@ -37,10 +37,10 @@ public class EmployeService {
         return employeDAO.getAll();
     }
 
-    public Optional<Employe> findEmployeById(String id) {
+    public Employe findEmployeById(String id) {
         return employeDAO.getAll().stream()
                 .filter(e -> e.getId().equals(id))
-                .findFirst();
+                .findFirst().get();
     }
 
     public List<Employe> getSortedEmployes() {
