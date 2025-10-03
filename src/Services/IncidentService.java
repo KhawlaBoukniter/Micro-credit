@@ -13,8 +13,8 @@ public class IncidentService {
 
         private IncidentDAO incidentDAO;
 
-        public IncidentService() {
-            this.incidentDAO = new IncidentDAO();
+        public IncidentService(IncidentDAO incidentDAO) {
+            this.incidentDAO = incidentDAO;
         }
 
         public void addIncident(Incident incident) {
