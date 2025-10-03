@@ -36,7 +36,7 @@ public class ProfessionnelDAO {
                 p.setString(14, professionnel.getImmatriculationFiscale());
                 p.setString(15, professionnel.getSecteurActivite());
                 p.setString(16, professionnel.getActivite());
-                p.setObject(17, professionnel.getStatut_professionnel());
+                p.setObject(17, professionnel.getStatut_professionnel().name());
 
                 p.executeUpdate();
             } catch (SQLException e) {
@@ -108,6 +108,7 @@ public class ProfessionnelDAO {
                             rs.getString("activite"),
                             TypeContrat.valueOf(rs.getString("statut_professionnel"))
                     );
+                    professionnel.setId(rs.getString("id"));
                     professionnels.add(professionnel);
                 }
             } catch (SQLException e) {
