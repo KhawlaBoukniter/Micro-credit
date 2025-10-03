@@ -14,21 +14,35 @@ import java.util.stream.Collectors;
 
 public class EcheanceService {
     private EcheanceDAO echeanceDAO;
-    private CreditDAO creditDAO;
     private IncidentDAO incidentDAO;
     private ScoringService scoringService;
-    private EmployeDAO employeDAO;
 
-    public EcheanceService() {
-        this.echeanceDAO = new EcheanceDAO();
-        this.creditDAO = new CreditDAO();
-        this.incidentDAO = new IncidentDAO();
-        this.scoringService = new ScoringService();
-        this.employeDAO = new EmployeDAO();
+    public EcheanceService(EcheanceDAO echeanceDAO, IncidentDAO incidentDAO, ScoringService scoringService) {
+        this.echeanceDAO = echeanceDAO;
+        this.incidentDAO = incidentDAO;
+        this.scoringService = scoringService;
 
     }
 
-    public void genererEcheances(Credit credit) {
+    public List<Echeance> getAll() { return echeanceDAO.getAll(); }
+
+    public Echeance getById(String id) {
+        return echeanceDAO.getAll()
+                .stream()
+                .filter(e -> e.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public List<Echeance> getEcheancesEnRetard() {
+        return echeanceDAO.getAll()
+                .stream()
+                .filter(e -> e.getStatusPaiement() == StatusPaiement.EN_RETARD
+                        || e.getStatusPaiement() == StatusPaiement.IMPAYE_NON_REGLE)
+                .collect(Collectors.toList());
+    }
+
+    public List<Echeance> genererEcheances(Credit credit) {
         List<Echeance> echeances = new ArrayList<>();
         Double mensualite = credit.getMontantOctroye() / credit.getDureeMois();
         LocalDate dateDebut = credit.getDateCredit().plusMonths(1);
@@ -44,6 +58,7 @@ public class EcheanceService {
             echeanceDAO.addEcheance(e);
             echeances.add(e);
         }
+        return echeances;
     }
 
     public void enregistrerPaiement(Echeance echeance, LocalDate datePaiement) {
