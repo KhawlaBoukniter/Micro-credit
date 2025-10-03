@@ -1,29 +1,31 @@
 package Services;
 
 import DAO.CreditDAO;
+import DAO.EcheanceDAO;
+import DAO.IncidentDAO;
 import Enums.Decision;
-import Models.Credit;
-import Models.Employe;
-import Models.Person;
-import Models.Professionnel;
+import Models.*;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CreditService {
     private CreditDAO creditDAO;
     private ScoringService scoringService;
+    private EcheanceService echeanceService;
 
-    public CreditService() {
+    public CreditService(ScoringService scoringService) {
         this.creditDAO = new CreditDAO();
-        this.scoringService = new ScoringService();
+        this.scoringService = scoringService;
+        this.echeanceService = new EcheanceService(new EcheanceDAO(), new IncidentDAO(), scoringService);
     }
 
     public void addCredit(Credit credit, Person client) {
+        if (credit.getId() == null || credit.getId().isEmpty()) {
+            credit.setId(UUID.randomUUID().toString().split("-")[0]);
+        }
+
         client.setScore(scoringService.calculerScore(client));
         Decision decision = determineDecision(client);
         credit.setDecision(decision);
@@ -33,8 +35,12 @@ public class CreditService {
             Double montant = calculerMontantOctroye(client);
             credit.setMontantOctroye(montant);
             creditDAO.addCredit(credit, client.getId());
+            echeanceService.genererEcheances(credit);
         } else if (decision.equals(Decision.ETUDE_MANUELLE)) {
-            // etude manuelle
+            Double montant = calculerMontantOctroye(client);
+            credit.setMontantOctroye(montant);
+            creditDAO.addCredit(credit, client.getId());
+            echeanceService.genererEcheances(credit);
         } else {
             // ne pas créer le crédit
         }
@@ -108,6 +114,13 @@ public class CreditService {
             if (client.getScore() >= 60) return base * 7;
         }
         return 0.0;
+    }
+
+    private Optional<Credit> activeCreditsByClientId(String id) {
+        return creditDAO.getAll().stream()
+                .filter(c -> c.getClient() != null && c.getClient().getId().equals(id))
+                .sorted(Comparator.comparing(Credit::getDateCredit).reversed())
+                .findFirst();
     }
 
 }
