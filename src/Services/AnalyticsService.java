@@ -18,11 +18,11 @@ public class AnalyticsService {
     private IncidentService incidentService;
     private CreditService creditService;
 
-    public AnalyticsService() {
-        this.employeService = new EmployeService();
-        this.professionnelService = new ProfessionnelService();
-        this.incidentService = new IncidentService();
-        this.creditService = new CreditService();
+    public AnalyticsService(EmployeService employeService, ProfessionnelService professionnelService, IncidentService incidentService, CreditService creditService) {
+        this.employeService = employeService;
+        this.professionnelService = professionnelService;
+        this.incidentService = incidentService;
+        this.creditService = creditService;
     }
 
     public List<Person> clientsEligiblesImmobilier() {
