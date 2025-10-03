@@ -15,18 +15,20 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ScoringService {
-    private IncidentDAO incidentDAO;
-    private CreditDAO creditDAO;
-    private EcheanceDAO echeanceDAO;
     private IncidentService incidentService;
     private CreditService creditService;
 
-    public ScoringService() {
-        this.incidentDAO = new IncidentDAO();
-        this.creditDAO = new CreditDAO();
-        this.echeanceDAO = new EcheanceDAO();
-        this.incidentService = new IncidentService();
-        this.creditService = new CreditService();
+    public ScoringService(CreditService creditService, IncidentService incidentService) {
+        this.incidentService = incidentService;
+        this.creditService = creditService;
+    }
+
+    public void setIncidentService(IncidentService incidentService) {
+        this.incidentService = incidentService;
+    }
+
+    public void setCreditService(CreditService creditService) {
+        this.creditService = creditService;
     }
 
     public Integer calculerScore(Person client) {
@@ -137,9 +139,7 @@ public class ScoringService {
             else rslt += 0;
 
         } else {
-            List<Credit> credits = creditDAO.getAll().stream()
-                    .filter(c -> c.getClient().equals(client))
-                    .collect(Collectors.toList());
+            List<Credit> credits = creditService.getCreditsByClient(client.getId());
 
             if (credits.stream().anyMatch(c -> c.getDateCredit().isBefore(LocalDate.now().minusYears(3)))) {
                 rslt += 10;
@@ -182,19 +182,19 @@ public class ScoringService {
     }
 
 
-    private Optional<Credit> activeCreditsByClientId(String id) {
-        return creditDAO.getAll().stream()
-                .filter(c -> c.getClient() != null && c.getClient().getId().equals(id))
-                .sorted(Comparator.comparing(Credit::getDateCredit).reversed())
-                .findFirst();
-    }
-
-    private List<Echeance> activeCreditsEcheances(String id) {
-        return echeanceDAO.getAll().stream()
-                .filter(e -> e.getCredit() != null && e.getCredit().equals(activeCreditsByClientId(id).orElse(null)))
-                .filter(e -> e.getStatusPaiement().equals(StatusPaiement.EN_RETARD))
-                .collect(Collectors.toList());
-    }
+//    private Optional<Credit> activeCreditsByClientId(String id) {
+//        return creditDAO.getAll().stream()
+//                .filter(c -> c.getClient() != null && c.getClient().getId().equals(id))
+//                .sorted(Comparator.comparing(Credit::getDateCredit).reversed())
+//                .findFirst();
+//    }
+//
+//    private List<Echeance> activeCreditsEcheances(String id) {
+//        return echeanceDAO.getAll().stream()
+//                .filter(e -> e.getCredit() != null && e.getCredit().equals(activeCreditsByClientId(id).orElse(null)))
+//                .filter(e -> e.getStatusPaiement().equals(StatusPaiement.EN_RETARD))
+//                .collect(Collectors.toList());
+//    }
 
     public Integer calculerScoreIncident(Echeance echeance) {
         Integer score = 0;
