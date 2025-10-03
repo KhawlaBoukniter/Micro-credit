@@ -30,15 +30,15 @@ public class EmployeDAO {
             p.setInt(6, employe.getNombreEnfants());
             p.setBoolean(7, employe.getInvestissement());
             p.setBoolean(8, employe.getPlacement());
-            p.setObject(9, employe.getSituationFamiliale());
+            p.setObject(9, employe.getSituationFamiliale().name());
             p.setTimestamp(10,  Timestamp.valueOf(LocalDateTime.now()));
             p.setInt(11, employe.getScore());
             p.setInt(12, employe.getAge());
             p.setDouble(13, employe.getSalaire());
             p.setInt(14, employe.getAnciennete());
             p.setString(15, employe.getPoste());
-            p.setObject(16, employe.getTypeContrat());
-            p.setObject(17, employe.getSecteur());
+            p.setObject(16, employe.getTypeContrat().name());
+            p.setObject(17, employe.getSecteur().name());
 
             p.executeUpdate();
 
@@ -101,15 +101,15 @@ public class EmployeDAO {
                     rs.getInt("nombre_enfants"),
                     rs.getBoolean("investissement"),
                     rs.getBoolean("placement"),
-                    SituationFamiliale.valueOf(rs.getString("situation_familiale")),
+                    SituationFamiliale.valueOf(rs.getString("situation_familiale").toUpperCase()),
                     rs.getTimestamp("created_at").toLocalDateTime(),
                     rs.getInt("score"),
                     rs.getInt("age"),
                     rs.getDouble("salaire"),
                     rs.getInt("anciennete"),
                     rs.getString("poste"),
-                    TypeContrat.valueOf(rs.getString("type_contrat")),
-                    Secteur.valueOf(rs.getString("secteur"))
+                    TypeContrat.valueOf(rs.getString("type_contrat").toUpperCase()),
+                    Secteur.valueOf(rs.getString("secteur").toUpperCase())
                 );
                 employe.setId(rs.getString("id"));
                 employes.add(employe);
