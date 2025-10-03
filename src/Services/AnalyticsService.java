@@ -63,4 +63,21 @@ public class AnalyticsService {
                 .collect(Collectors.toList());
     }
 
+    public List<Person> getClientsSorted() {
+        List<Person> allClients = new ArrayList<>();
+        allClients.addAll(employeService.getAllEmployes());
+        allClients.addAll(professionnelService.getAllProfessionnels());
+
+        return allClients.stream()
+                .sorted(Comparator.comparing(Person::getScore).reversed()
+                        .thenComparing(c -> {
+                            if (c instanceof Employe) return ((Employe) c).getSalaire();
+                            if (c instanceof Professionnel) return ((Professionnel) c).getRevenu();
+                            return 0.0;
+                        }, Comparator.reverseOrder())
+                        .thenComparing(Person::getCreatedAt, Comparator.reverseOrder())
+                )
+                .collect(Collectors.toList());
+    }
+
 }
