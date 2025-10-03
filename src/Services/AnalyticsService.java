@@ -51,4 +51,16 @@ public class AnalyticsService {
                 .collect(Collectors.toList());
     }
 
+    public List<Person> getRiskClients() {
+        List<Person> allClients = new ArrayList<>();
+        allClients.addAll(employeService.getAllEmployes());
+        allClients.addAll(professionnelService.getAllProfessionnels());
+
+        return allClients.stream()
+                .filter(c -> c.getScore() != null && c.getScore() < 60)
+                .filter(c -> !incidentService.getRecentIncidents(c).isEmpty())
+                .sorted(Comparator.comparing(Person::getScore)).limit(10)
+                .collect(Collectors.toList());
+    }
+
 }
